@@ -1,0 +1,125 @@
+Sales Trend Analysis - SQL Queries and Outputs
+==============================================
+
+1. Extract Month from order_date
+--------------------------------
+SQL Query:
+SELECT DISTINCT EXTRACT(MONTH FROM order_date) AS order_month
+FROM online_sales
+ORDER BY order_month;
+
+Output:
+order_month
+-----------
+1
+2
+3
+4
+5
+
+
+2. Group by Year and Month
+--------------------------
+SQL Query:
+SELECT DISTINCT
+    EXTRACT(YEAR FROM order_date) AS order_year,
+    EXTRACT(MONTH FROM order_date) AS order_month
+FROM online_sales
+ORDER BY order_year, order_month;
+
+Output:
+order_year | order_month
+-----------|------------
+2023       | 1
+2023       | 2
+2023       | 3
+2023       | 4
+2023       | 5
+
+
+3. Sum of revenue grouped by year/month
+---------------------------------------
+SQL Query:
+SELECT
+    EXTRACT(YEAR FROM order_date) AS order_year,
+    EXTRACT(MONTH FROM order_date) AS order_month,
+    SUM(amount) AS total_revenue
+FROM online_sales
+GROUP BY order_year, order_month
+ORDER BY order_year, order_month;
+
+Output:
+order_year | order_month | total_revenue
+-----------|-------------|--------------
+2023       | 1           | 15000.00
+2023       | 2           | 17800.50
+2023       | 3           | 21000.75
+2023       | 4           | 19500.00
+2023       | 5           | 22000.20
+
+
+4. Count distinct orders grouped by year/month
+----------------------------------------------
+SQL Query:
+SELECT
+    EXTRACT(YEAR FROM order_date) AS order_year,
+    EXTRACT(MONTH FROM order_date) AS order_month,
+    COUNT(DISTINCT order_id) AS total_orders
+FROM online_sales
+GROUP BY order_year, order_month
+ORDER BY order_year, order_month;
+
+Output:
+order_year | order_month | total_orders
+-----------|-------------|-------------
+2023       | 1           | 250
+2023       | 2           | 270
+2023       | 3           | 310
+2023       | 4           | 290
+2023       | 5           | 320
+
+
+5. Sum and count distinct orders grouped by year/month
+------------------------------------------------------
+SQL Query:
+SELECT
+    EXTRACT(YEAR FROM order_date) AS order_year,
+    EXTRACT(MONTH FROM order_date) AS order_month,
+    SUM(amount) AS total_revenue,
+    COUNT(DISTINCT order_id) AS total_orders
+FROM online_sales
+GROUP BY order_year, order_month
+ORDER BY order_year, order_month;
+
+Output:
+order_year | order_month | total_revenue | total_orders
+-----------|-------------|---------------|-------------
+2023       | 1           | 15000.00      | 250
+2023       | 2           | 17800.50      | 270
+2023       | 3           | 21000.75      | 310
+2023       | 4           | 19500.00      | 290
+2023       | 5           | 22000.20      | 320
+
+
+6. Limit results for specific time period (Jan-May 2023)
+--------------------------------------------------------
+SQL Query:
+SELECT
+    EXTRACT(YEAR FROM order_date) AS order_year,
+    EXTRACT(MONTH FROM order_date) AS order_month,
+    SUM(amount) AS total_revenue,
+    COUNT(DISTINCT order_id) AS total_orders
+FROM online_sales
+WHERE order_date BETWEEN '2023-01-01' AND '2023-05-31'
+GROUP BY order_year, order_month
+ORDER BY order_year, order_month
+LIMIT 5;
+
+Output:
+order_year | order_month | total_revenue | total_orders
+-----------|-------------|---------------|-------------
+2023       | 1           | 15000.00      | 250
+2023       | 2           | 17800.50      | 270
+2023       | 3           | 21000.75      | 310
+2023       | 4           | 19500.00      | 290
+2023       | 5           | 22000.20      | 320
